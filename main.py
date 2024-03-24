@@ -27,8 +27,29 @@ class Conv2D:
 
 
     def forward(self):
+
+        if self.padding > 0:
+            new_mat = []
+
+            for _ in range(self.padding):
+                new_mat.append([0 for _ in range((self.padding * 2) + len(self.mat[0]))])
+
+            for row in self.mat:
+                new_row = [0 for _ in range(self.padding)] + row +  [0 for _ in range(self.padding)] 
+                new_mat.append(new_row)
+
+            for _ in range(self.padding):
+                new_mat.append([0 for _ in range((self.padding * 2) + len(self.mat[0]))])
+
+            self.mat = new_mat
+
+
+
         result = []
         result_row = []
+
+
+
 
         for row in range(0, len(self.mat), self.stride):
             for col in range(0, len(self.mat[0]), self.stride):
@@ -64,8 +85,6 @@ class Conv2D:
 
 
 def main():
-    random.seed(time.time())
-    print(calculate_convo_width(width=5, kernel_size=3, stride=2, padding=0))
 
     mat = [
             [1,1,1,1,1],
@@ -75,11 +94,11 @@ def main():
             [1,1,1,1,1],
             ]
 
-    convo = Conv2D(mat=mat, stride=2)
+    convo = Conv2D(mat=mat, stride=2, padding=0)
     result = convo.forward()
 
-    for row in result:
-        print(row)
+    print(len(result), len(result[0]))
+
 
 if __name__ == "__main__":
     main()
